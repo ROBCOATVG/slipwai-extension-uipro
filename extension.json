@@ -1,4 +1,5 @@
 {
+  "key": "uipro",
   "name": "UI/UX Pro Max",
   "description": "Installs the ui-ux-pro-max skill into skills/: an offline, searchable design-system generator (styles, palettes, type pairings, chart types and UX rules by product type) a slice consults before deciding what its screen looks like. Needs a browser app.",
   "kind": "extension",
