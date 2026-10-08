@@ -10,6 +10,7 @@
   ],
   "ignore": "skills/ui-ux-pro-max/\n",
   "hooks": {
-    "init": "init.py"
+    "init": "init.py",
+    "check": "hooks/check.py"
   }
 }
