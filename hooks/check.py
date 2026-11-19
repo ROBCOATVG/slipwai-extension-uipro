@@ -69,6 +69,17 @@ def browser_apps() -> list[str]:
             and (ROOT / str(one.get("path", ""))).is_dir()]
 
 
+
+def declares_capabilities(text: str) -> bool:
+    """Whether the skill's front matter carries the `capabilities:` line `init.py`'s `with_capability` writes.
+
+    The check once looked for the word `capability`, which `capabilities` does not contain, so a skill
+    installed exactly as `init.py` installs it was reported as hand-replaced on every run."""
+    if not text.startswith("---\n"):
+        return False
+    front, separator, _ = text[4:].partition("\n---\n")
+    return bool(separator) and any(line.startswith("capabilities:") for line in front.splitlines())
+
 def main() -> int:
     if not adopted():
         print("check-uipro: not adopted here; nothing to check")
@@ -81,20 +92,20 @@ def main() -> int:
         said = (f"check-uipro: skills/{SKILL}/ is not here. It is ignored by Git, so a fresh clone and a CI "
                 f"runner have the election and not the skill.\n"
                 f"Install it:\n"
-                f"  ./init --extension uipro")
+                f"  python3 scripts/extensions/uipro/init.py")
         print(said, file=sys.stderr if required else sys.stdout)
         return 1 if required else 0
     skill_md = INSTALLED / "SKILL.md"
     if not skill_md.is_file():
         print(f"check-uipro: skills/{SKILL}/ is here and has no SKILL.md, so the install did not finish.\n"
               f"Install it again:\n"
-              f"  ./init --extension uipro", file=sys.stderr)
+              f"  python3 scripts/extensions/uipro/init.py", file=sys.stderr)
         return 1
-    if "capability" not in skill_md.read_text(encoding="utf-8"):
+    if not declares_capabilities(skill_md.read_text(encoding="utf-8")):
         print(f"check-uipro: skills/{SKILL}/SKILL.md carries no capability line, so it is not the copy "
               f"`./init` wrote — a hand-replaced or part-installed skill.\n"
               f"Install it again:\n"
-              f"  ./init --extension uipro", file=sys.stderr)
+              f"  python3 scripts/extensions/uipro/init.py", file=sys.stderr)
         return 1
     print(f"check-uipro: skills/{SKILL}/ is installed and complete")
     return 0
