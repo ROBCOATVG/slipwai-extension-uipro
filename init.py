@@ -209,7 +209,7 @@ def main() -> int:
         install(source, ROOT / "skills" / SKILL)
     project_guidance()
     reproject()
-    print(f"UI/UX Pro Max installed at skills/{SKILL}/ (ignored by Git; `./init --extension uipro` reinstalls it).")
+    print(f"UI/UX Pro Max installed at skills/{SKILL}/ (ignored by Git; `python3 scripts/extensions/uipro/init.py` reinstalls it).")
     return 0
 
 
